@@ -6,12 +6,12 @@ print("📥 Consumer started: listening to Kafka, running calculations, writing 
 
 consumer = KafkaConsumer(
     'finance_prices',
-    bootstrap_servers=['localhost:9092'],
+    bootstrap_servers=['kafka:29092'],
     auto_offset_reset='latest', 
     value_deserializer=lambda m: json.loads(m.decode('utf-8'))
 )
 
-db_client = InfluxDBClient(host='localhost', port=8086, database='finance_data')
+db_client = InfluxDBClient(host='influxdb', port=8086, database='finance_data')
 
 for message in consumer:
     try:

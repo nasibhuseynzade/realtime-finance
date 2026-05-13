@@ -71,6 +71,24 @@ services:
       - caddy_config:/config
     depends_on:
       - grafana
+  # 5. Veri Üreticisi (Python)
+  producer:
+    build: .
+    container_name: finance_producer
+    command: python producer.py
+    depends_on:
+      - kafka
+    restart: always
+
+  # 6. Veri Tüketicisi (Python)
+  consumer:
+    build: .
+    container_name: finance_consumer
+    command: python consumer.py
+    depends_on:
+      - kafka
+      - influxdb
+    restart: always
 
 # Persistent volumes definition
 volumes:
