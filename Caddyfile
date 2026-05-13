@@ -1,0 +1,3 @@
+dashboard.nasib.tech {
+    reverse_proxy grafana:3000
+}

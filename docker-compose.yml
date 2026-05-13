@@ -58,6 +58,20 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana # charts, settings, and alerts are stored here
 
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - grafana
+
 # Persistent volumes definition
 volumes:
   zookeeper_data:
@@ -65,3 +79,5 @@ volumes:
   kafka_data:
   influxdb_data:
   grafana_data:
+  caddy_data:
+  caddy_config:
