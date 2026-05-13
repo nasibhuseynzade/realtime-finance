@@ -3,13 +3,13 @@ name: Deploy to AWS EC2
 on:
   push:
     branches:
-      - main # Sadece main dalına kod gönderildiğinde çalışır
+      - main 
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Sunucuya Bağlan ve Güncelle
+      - name: Connect to EC2 and Deploy
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -17,9 +17,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd ~/realtime-finance
-            # Sunucudaki nano değişikliklerini veya çakışmaları zorla ezip GitHub'daki en güncel haliyle eşitler
             git fetch --all
             git reset --hard origin/main
             git clean -fd
-            # Sistemi yeni kodlarla yeniden başlatır
             docker-compose up -d
