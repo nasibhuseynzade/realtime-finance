@@ -75,7 +75,7 @@ services:
   producer:
     build: .
     container_name: finance_producer
-    command: python producer.py
+    command: python -u producer.py
     depends_on:
       - kafka
     restart: always
@@ -84,7 +84,7 @@ services:
   consumer:
     build: .
     container_name: finance_consumer
-    command: python consumer.py
+    command: python -u consumer.py
     depends_on:
       - kafka
       - influxdb
