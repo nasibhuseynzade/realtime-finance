@@ -1,15 +1,25 @@
 from kafka import KafkaConsumer
 from influxdb import InfluxDBClient
 import json
+from kafka.errors import NoBrokersAvailable
+import time
 
 print("📥 Consumer started: listening to Kafka, running calculations, writing to InfluxDB...")
 
-consumer = KafkaConsumer(
-    'finance_prices',
-    bootstrap_servers=['kafka:29092'],
-    auto_offset_reset='latest', 
-    value_deserializer=lambda m: json.loads(m.decode('utf-8'))
-)
+consumer = None
+while consumer is None:
+    try:
+        consumer = KafkaConsumer(
+            'finance_prices',
+            bootstrap_servers=['kafka:29092'],
+            auto_offset_reset='latest', 
+            value_deserializer=lambda m: json.loads(m.decode('utf-8'))
+        )
+
+        print("✅ Connected to Kafka!")
+    except NoBrokersAvailable:
+        print("⏳ Kafka not ready yet, retrying in 5 seconds...")
+        time.sleep(5)
 
 db_client = InfluxDBClient(host='influxdb', port=8086, database='finance_data')
 

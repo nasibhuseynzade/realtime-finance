@@ -5,13 +5,23 @@ import time
 from datetime import datetime
 import warnings
 
+from kafka.errors import NoBrokersAvailable
+
 warnings.filterwarnings('ignore')
 print("🚀 Producer started: fetching data and sending to Kafka...")
 
-producer = KafkaProducer(
-    bootstrap_servers=['kafka:29092'],
-    value_serializer=lambda v: json.dumps(v).encode('utf-8')
-)
+producer = None
+while producer is None:
+    try:
+        producer = KafkaProducer(
+            bootstrap_servers=['kafka:29092'],
+            value_serializer=lambda v: json.dumps(v).encode('utf-8')
+        )
+        print("✅ Connected to Kafka!")
+    except NoBrokersAvailable:
+        print("⏳ Kafka not ready yet, retrying in 5 seconds...")
+        time.sleep(5)
+
 
 while True:
     try:
