@@ -16,6 +16,8 @@ The system leverages an event-driven architecture, streaming live market data as
 
 ## 🏗️ Architecture
 
+![Finance Pipeline Architecture](finance_pipeline.jpeg)
+
 1. **Data Ingestion:** A Python Producer fetches real-time ticker data from the Yahoo Finance API (`yfinance`).
 2. **Message Broker:** The data is serialized into JSON and pushed to an **Apache Kafka** topic (`finance_topic`).
 3. **Data Processing:** A Python Consumer subscribes to the Kafka topic, processes the incoming events, and writes them to **InfluxDB**.
@@ -42,7 +44,7 @@ To run this data pipeline on your local machine, ensure you have Docker and Dock
 1. Clone the repository:
 
 ```bash
-git clone [https://github.com/nasibhuseynzade/realtime-finance.git](https://github.com/nasibhuseynzade/realtime-finance.git)
+git clone https://github.com/nasibhuseynzade/realtime-finance.git
 cd realtime-finance
 ```
 
@@ -72,4 +74,4 @@ or [dashboard.nasib.tech](https://dashboard.nasib.tech/?orgId=1&from=now-6h&to=n
 InfluxDB UI: http://localhost:8086
 
 ## 👨‍💻 Author
-Nasib Huseynzade 
+Nasib Huseynzade, 10.05.2026
