@@ -1,6 +1,7 @@
 from kafka import KafkaConsumer
 from influxdb import InfluxDBClient
 import json
+import os
 from kafka.errors import NoBrokersAvailable
 import time
 
@@ -11,8 +12,11 @@ while consumer is None:
     try:
         consumer = KafkaConsumer(
             'finance_prices',
-            bootstrap_servers=['kafka:29092'],
-            auto_offset_reset='latest', 
+            bootstrap_servers=[os.getenv('KAFKA_BOOTSTRAP', 'kafka:9092')],
+            # With a consumer group, offsets are committed: after a restart
+            # the consumer resumes where it left off and no message is lost.
+            group_id=os.getenv('KAFKA_GROUP_ID', 'influx-writer'),
+            auto_offset_reset='latest',
             value_deserializer=lambda m: json.loads(m.decode('utf-8'))
         )
 
@@ -21,7 +25,7 @@ while consumer is None:
         print("⏳ Kafka not ready yet, retrying in 5 seconds...")
         time.sleep(5)
 
-db_client = InfluxDBClient(host='influxdb', port=8086, database='finance_data')
+db_client = InfluxDBClient(host=os.getenv('INFLUX_HOST', 'influxdb'), port=8086, database='finance_data')
 
 for message in consumer:
     try:

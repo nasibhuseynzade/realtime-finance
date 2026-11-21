@@ -1,0 +1,17 @@
+# Local development only. Production exposes nothing but Caddy (80/443).
+# Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+# (or put COMPOSE_FILE=docker-compose.yml:docker-compose.dev.yml in your local .env;
+#  on Windows use ; instead of :)
+services:
+  grafana:
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      GF_SERVER_ROOT_URL: http://localhost:3000
+  influxdb:
+    ports:
+      - "127.0.0.1:8086:8086"
+  # Caddy is not started locally: it would try to get a real HTTPS
+  # certificate for dashboard.nasib.tech and fail.
+  caddy:
+    profiles: ["prod"]

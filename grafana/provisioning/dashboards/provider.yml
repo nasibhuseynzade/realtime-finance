@@ -1,0 +1,14 @@
+apiVersion: 1
+
+providers:
+  - name: finance
+    type: file
+    folder: ''
+    disableDeletion: true
+    # You can edit in the UI, but the source of truth is the JSON in the repo:
+    # after editing, use Share -> Export -> "Export for sharing externally" off,
+    # save the JSON over grafana/dashboards/finance.json and commit it.
+    allowUiUpdates: true
+    updateIntervalSeconds: 30
+    options:
+      path: /etc/grafana/dashboards

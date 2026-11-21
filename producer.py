@@ -1,6 +1,7 @@
 import yfinance as yf
 from kafka import KafkaProducer
 import json
+import os
 import time
 from datetime import datetime
 import warnings
@@ -14,7 +15,7 @@ producer = None
 while producer is None:
     try:
         producer = KafkaProducer(
-            bootstrap_servers=['kafka:29092'],
+            bootstrap_servers=[os.getenv('KAFKA_BOOTSTRAP', 'kafka:9092')],
             value_serializer=lambda v: json.dumps(v).encode('utf-8')
         )
         print("✅ Connected to Kafka!")
