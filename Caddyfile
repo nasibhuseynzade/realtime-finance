@@ -1,3 +1,8 @@
 dashboard.nasib.tech {
     reverse_proxy grafana:3000
 }
+
+rewe.nasib.tech {
+    encode gzip
+    reverse_proxy rewe-api:8000
+}
